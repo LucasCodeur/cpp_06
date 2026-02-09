@@ -21,24 +21,27 @@ class	ScalarConverter
 {
 	public:
 		ScalarConverter	(void);
-		// ScalarConverter	(//Parameters);
+		ScalarConverter	(int parameters);
 		ScalarConverter	(const ScalarConverter &other);
 		~ScalarConverter (void);
 		ScalarConverter& operator= ( const ScalarConverter &other);
 
-		void		print(void);
-		int			set_display(std::string& number);
-		void		trim_zero(std::string& number);
-		bool		is_number(const std::string& s);
-		type		detect_type(std::string number);
+		type		detectType(std::string number);
+		int			setDisplay(std::string& number);
+		bool		parsing(std::string& number);
+		bool		isNumber(const std::string& s);
+		void		trimZero(std::string& number);
 		void		printFromDouble(std::string number);
+		void		printDouble(long double double_number, std::string&number, int nb_of_decs);
 		void		printFromInt(std::string number);
+		void		printInt(long int int_number, std::string&number, int nb_of_decs, bool check_nan);
+		void		printChar(char char_number, std::string&number);
+		void		printFloat(long double float_number, std::string&number, int nb_of_decs);
 		void		printFromFloat(std::string number);
 		void		printFromChar(std::string number);
 		static void	convert(std::string	number);
 		
 	private:
-
 };
 
 # endif

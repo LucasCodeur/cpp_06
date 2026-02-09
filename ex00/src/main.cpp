@@ -12,12 +12,13 @@
 
 #include <iostream>
 #include <limits>
+#include <cmath> 
 
 #include "ScalarConverter.hpp"
 
 static void	t_converts(int argc, char **argv);
 static void	t_numeric_limits(void);
-static void	t_detect_type(void);
+static void	t_detectType(void);
 static void	t_double(void);
 static void	t_int(void);
 
@@ -25,10 +26,10 @@ int	main(int argc , char **argv)
 {
 
 	// t_double();
-	t_int();
+	// t_int();
 	t_converts(argc, argv);
 	// t_numeric_limits();
-	// t_detect_type();
+	// t_detectType();
 	return (0);
 }
 
@@ -37,6 +38,11 @@ static void	t_numeric_limits(void)
 	// float	nb = 1.1f;
 	// std::cout << std::numeric_limits<long double>::round_error() << std::endl;
 	// std::cout << std::numeric_limits<float>::round_style << std::endl;
+	// std::cout << std::numeric_limits<float>::min() << std::endl;
+	// if  (std::numeric_limits<float>::min() > -2)
+	// 	std::cout << "-2 is inferior\n";
+	std::cout << std::numeric_limits<int>::quiet_NaN() << std::endl;
+	std::cout << std::isnan(NAN) << std::endl;
 
 }
 
@@ -71,64 +77,64 @@ static void	t_int(void)
 	std::cout << 2147487649 << std::endl;
 }
 
-static void	t_detect_type(void)
+static void	t_detectType(void)
 {
 	std::cout << "--------------------------------------------------------" << std::endl;
-	std::cout << "Test : t_detect_type" << std::endl;
+	std::cout << "Test : t_detectType" << std::endl;
 	ScalarConverter	test;
 	type	ret;
 	
-	ret = test.detect_type("1004");
+	ret = test.detectType("1004");
 	if (ret == INT)
 		std::cout << "100400000000000000000000: INT" << std::endl;
-	ret = test.detect_type("100400000000000000000000");
+	ret = test.detectType("100400000000000000000000");
 	if (ret == INT)
 		std::cout << "1004: INT" << std::endl;
-	ret = test.detect_type("-1");
+	ret = test.detectType("-1");
 	if (ret == INT)
 		std::cout << "-1: INT" << std::endl;
-	ret = test.detect_type("1.0");
+	ret = test.detectType("1.0");
 	if (ret == DOUBLE)
 		std::cout << "1.0: DOUBLE" << std::endl;
-	ret = test.detect_type("10000000000000000.000000");
+	ret = test.detectType("10000000000000000.000000");
 	if (ret == DOUBLE)
 		std::cout << "10000000000000000.000000: DOUBLE" << std::endl;
-	ret = test.detect_type("-100000.123430");
+	ret = test.detectType("-100000.123430");
 	if (ret == DOUBLE)
 		std::cout << "-100000.123430: DOUBLE" << std::endl;
-	ret = test.detect_type("1.0f");
+	ret = test.detectType("1.0f");
 	if (ret == FLOAT)
 		std::cout << "1.0f: FLOAT" << std::endl;
-	ret = test.detect_type("1.00000000f");
+	ret = test.detectType("1.00000000f");
 	if (ret == FLOAT)
 		std::cout << "1.00000000f: FLOAT" << std::endl;
-	ret = test.detect_type("1000000000000000000000.00000000f");
+	ret = test.detectType("1000000000000000000000.00000000f");
 	if (ret == FLOAT)
 		std::cout << "1000000000000000000000.00000000f: FLOAT" << std::endl;
-	ret = test.detect_type("-1.00000000f");
+	ret = test.detectType("-1.00000000f");
 	if (ret == FLOAT)
 		std::cout << "-1.00000000f: FLOAT" << std::endl;
-	ret = test.detect_type("1");
+	ret = test.detectType("1");
 	if (ret == CHAR)
 		std::cout << "1: CHAR" << std::endl;
 	else
 		std::cout << "1: NOT CHAR" << std::endl;
-	ret = test.detect_type("9");
+	ret = test.detectType("9");
 	if (ret == CHAR)
 		std::cout << "9: CHAR" << std::endl;
 	else
 		std::cout << "9: NOT CHAR" << std::endl;
-	ret = test.detect_type("a");
+	ret = test.detectType("a");
 	if (ret == CHAR)
 		std::cout << "a: CHAR" << std::endl;
 	else
 		std::cout << "a: NOT CHAR" << std::endl;
-	ret = test.detect_type("aa");
+	ret = test.detectType("aa");
 	if (ret == CHAR)
 		std::cout << "aa: CHAR" << std::endl;
 	else
 		std::cout << "aa: NOT CHAR" << std::endl;
-	ret = test.detect_type("'");
+	ret = test.detectType("'");
 	if (ret == CHAR)
 		std::cout << "': CHAR" << std::endl;
 	else

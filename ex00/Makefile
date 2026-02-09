@@ -13,7 +13,7 @@
 .PHONY : all clean fclean re debug
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -MMD -std=c++98
-CFLAGS_DEBUG = -Wall -Wextra -MMD -g3 -D DEBUG=1
+CFLAGS_DEBUG = -Wall -Wextra -MMD -g3 -D DEBUG=1 -std=c++98
 NAME =	ConversionOfScalarTypes
 P_SRC = src/
 P_OBJ = .obj/
