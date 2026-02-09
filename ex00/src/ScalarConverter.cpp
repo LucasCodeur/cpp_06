@@ -386,3 +386,42 @@ void	ScalarConverter::convert(std::string number)
 	else if (ret == CHAR)
 		temp.printFromChar(number);
 }
+
+template	<typename T> T print(T number_to_convert, std::string&number, int nb_of_decs)
+{
+	long double	double_number;	
+	long double	float_number;
+	char		char_number;
+
+	float_number = static_cast<float>(number_to_convert);
+	double_number = static_cast<double>(number_to_convert);	
+	char_number = static_cast<char>(number_to_convert);	
+		
+	std::cout << "char: ";
+	if (check_nan == true)
+		std::cout << "impossible" << std::endl;
+	else if (int_number < 33 || number.length() > 1)
+		std::cout << "Non displayable" << std::endl;
+	else
+		std::cout << char_number << std::endl;
+	std::cout << "int: ";
+	if (int_number >= std::numeric_limits<int>::max() || int_number <= std::numeric_limits<int>::min())
+		std::cout << "impossible" << std::endl;
+	else if (check_nan == true)
+		std::cout << "impossible" << std::endl;
+	else
+		std::cout << int_number << std::endl;
+	if ((float_number > -1 && float_number >= std::numeric_limits<float>::max()) || (float_number < 0 && std::numeric_limits<float>::min() <= float_number))
+		std::cout << "float: impossible" << std::endl;
+	else if (check_nan == true)
+		std::cout << "float: nanf" << std::endl;
+	else
+		std::cout << "float: " << std::showpoint << std::setprecision(nb_of_decs) << float_number << "f" << std::endl;
+	if ((double_number > -1 && double_number >= std::numeric_limits<double>::max()) || (double_number < 0 && std::numeric_limits<double>::min() <= double_number))
+		std::cout << "double: impossible" << std::endl;
+	else if (check_nan == true)
+		std::cout << "double: nan" << std::endl;
+	else
+		std::cout << "double: "<< std::showpoint << std::setprecision(nb_of_decs) << double_number << std::endl;
+}
+

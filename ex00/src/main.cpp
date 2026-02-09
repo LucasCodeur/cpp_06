@@ -21,15 +21,17 @@ static void	t_numeric_limits(void);
 static void	t_detectType(void);
 static void	t_double(void);
 static void	t_int(void);
+static void	t_template(void);
 
 int	main(int argc , char **argv)
 {
 
 	// t_double();
 	// t_int();
-	t_converts(argc, argv);
+	// t_converts(argc, argv);
 	// t_numeric_limits();
 	// t_detectType();
+	t_template();
 	return (0);
 }
 
@@ -139,4 +141,18 @@ static void	t_detectType(void)
 		std::cout << "': CHAR" << std::endl;
 	else
 		std::cout << "': NOT CHAR" << std::endl;
+}
+
+
+#include <iostream>
+template <typename T> T myMax(T x, T y){
+		return (x > y) ? x : y;
+}
+
+static void	t_template(void)
+{
+	std::cout << "--------------------------------------------------------" << std::endl;
+	std::cout << "Test : t_template" << std::endl;
+	std::cout << "Max of 3 and 7 is: " << myMax<int>(3, 7) << std::endl;
+	std::cout << "Max of 3.5 and 7.5 is :" << myMax<double>(3.5, 7.5) << std::endl;
 }

@@ -31,6 +31,7 @@ class	ScalarConverter
 		bool		parsing(std::string& number);
 		bool		isNumber(const std::string& s);
 		void		trimZero(std::string& number);
+		template	<typename T> T print(T number_to_convert, std::string&number, int nb_of_decs);
 		void		printFromDouble(std::string number);
 		void		printDouble(long double double_number, std::string&number, int nb_of_decs);
 		void		printFromInt(std::string number);
