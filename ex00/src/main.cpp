@@ -28,10 +28,10 @@ int	main(int argc , char **argv)
 
 	// t_double();
 	// t_int();
-	// t_converts(argc, argv);
+	t_converts(argc, argv);
 	// t_numeric_limits();
 	// t_detectType();
-	t_template();
+	// t_template();
 	return (0);
 }
 
@@ -55,9 +55,7 @@ static void	t_converts(int argc, char **argv)
 	if (argc != 2)
 		return ;
 
-	ScalarConverter	test;
-
-	test.convert(argv[1]);
+	ScalarConverter::convert(argv[1]);
 }
 
 static void	t_double(void)
@@ -79,69 +77,69 @@ static void	t_int(void)
 	std::cout << 2147487649 << std::endl;
 }
 
-static void	t_detectType(void)
-{
-	std::cout << "--------------------------------------------------------" << std::endl;
-	std::cout << "Test : t_detectType" << std::endl;
-	ScalarConverter	test;
-	type	ret;
-	
-	ret = test.detectType("1004");
-	if (ret == INT)
-		std::cout << "100400000000000000000000: INT" << std::endl;
-	ret = test.detectType("100400000000000000000000");
-	if (ret == INT)
-		std::cout << "1004: INT" << std::endl;
-	ret = test.detectType("-1");
-	if (ret == INT)
-		std::cout << "-1: INT" << std::endl;
-	ret = test.detectType("1.0");
-	if (ret == DOUBLE)
-		std::cout << "1.0: DOUBLE" << std::endl;
-	ret = test.detectType("10000000000000000.000000");
-	if (ret == DOUBLE)
-		std::cout << "10000000000000000.000000: DOUBLE" << std::endl;
-	ret = test.detectType("-100000.123430");
-	if (ret == DOUBLE)
-		std::cout << "-100000.123430: DOUBLE" << std::endl;
-	ret = test.detectType("1.0f");
-	if (ret == FLOAT)
-		std::cout << "1.0f: FLOAT" << std::endl;
-	ret = test.detectType("1.00000000f");
-	if (ret == FLOAT)
-		std::cout << "1.00000000f: FLOAT" << std::endl;
-	ret = test.detectType("1000000000000000000000.00000000f");
-	if (ret == FLOAT)
-		std::cout << "1000000000000000000000.00000000f: FLOAT" << std::endl;
-	ret = test.detectType("-1.00000000f");
-	if (ret == FLOAT)
-		std::cout << "-1.00000000f: FLOAT" << std::endl;
-	ret = test.detectType("1");
-	if (ret == CHAR)
-		std::cout << "1: CHAR" << std::endl;
-	else
-		std::cout << "1: NOT CHAR" << std::endl;
-	ret = test.detectType("9");
-	if (ret == CHAR)
-		std::cout << "9: CHAR" << std::endl;
-	else
-		std::cout << "9: NOT CHAR" << std::endl;
-	ret = test.detectType("a");
-	if (ret == CHAR)
-		std::cout << "a: CHAR" << std::endl;
-	else
-		std::cout << "a: NOT CHAR" << std::endl;
-	ret = test.detectType("aa");
-	if (ret == CHAR)
-		std::cout << "aa: CHAR" << std::endl;
-	else
-		std::cout << "aa: NOT CHAR" << std::endl;
-	ret = test.detectType("'");
-	if (ret == CHAR)
-		std::cout << "': CHAR" << std::endl;
-	else
-		std::cout << "': NOT CHAR" << std::endl;
-}
+// static void	t_detectType(void)
+// {
+// 	std::cout << "--------------------------------------------------------" << std::endl;
+// 	std::cout << "Test : t_detectType" << std::endl;
+// 	ScalarConverter	test;
+// 	type	ret;
+//
+// 	ret = test.detectType("1004");
+// 	if (ret == INT)
+// 		std::cout << "100400000000000000000000: INT" << std::endl;
+// 	ret = test.detectType("100400000000000000000000");
+// 	if (ret == INT)
+// 		std::cout << "1004: INT" << std::endl;
+// 	ret = test.detectType("-1");
+// 	if (ret == INT)
+// 		std::cout << "-1: INT" << std::endl;
+// 	ret = test.detectType("1.0");
+// 	if (ret == DOUBLE)
+// 		std::cout << "1.0: DOUBLE" << std::endl;
+// 	ret = test.detectType("10000000000000000.000000");
+// 	if (ret == DOUBLE)
+// 		std::cout << "10000000000000000.000000: DOUBLE" << std::endl;
+// 	ret = test.detectType("-100000.123430");
+// 	if (ret == DOUBLE)
+// 		std::cout << "-100000.123430: DOUBLE" << std::endl;
+// 	ret = test.detectType("1.0f");
+// 	if (ret == FLOAT)
+// 		std::cout << "1.0f: FLOAT" << std::endl;
+// 	ret = test.detectType("1.00000000f");
+// 	if (ret == FLOAT)
+// 		std::cout << "1.00000000f: FLOAT" << std::endl;
+// 	ret = test.detectType("1000000000000000000000.00000000f");
+// 	if (ret == FLOAT)
+// 		std::cout << "1000000000000000000000.00000000f: FLOAT" << std::endl;
+// 	ret = test.detectType("-1.00000000f");
+// 	if (ret == FLOAT)
+// 		std::cout << "-1.00000000f: FLOAT" << std::endl;
+// 	ret = test.detectType("1");
+// 	if (ret == CHAR)
+// 		std::cout << "1: CHAR" << std::endl;
+// 	else
+// 		std::cout << "1: NOT CHAR" << std::endl;
+// 	ret = test.detectType("9");
+// 	if (ret == CHAR)
+// 		std::cout << "9: CHAR" << std::endl;
+// 	else
+// 		std::cout << "9: NOT CHAR" << std::endl;
+// 	ret = test.detectType("a");
+// 	if (ret == CHAR)
+// 		std::cout << "a: CHAR" << std::endl;
+// 	else
+// 		std::cout << "a: NOT CHAR" << std::endl;
+// 	ret = test.detectType("aa");
+// 	if (ret == CHAR)
+// 		std::cout << "aa: CHAR" << std::endl;
+// 	else
+// 		std::cout << "aa: NOT CHAR" << std::endl;
+// 	ret = test.detectType("'");
+// 	if (ret == CHAR)
+// 		std::cout << "': CHAR" << std::endl;
+// 	else
+// 		std::cout << "': NOT CHAR" << std::endl;
+// }
 
 
 #include <iostream>
