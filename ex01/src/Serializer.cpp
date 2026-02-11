@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "Serializer.hpp"
+
 #include <iostream>
 #include <stdint.h>
 
@@ -41,6 +42,8 @@ Serializer& Serializer::operator= ( const Serializer &)
 
 uintptr_t Serializer::serialize(Data* ptr)
 {
+	if (!ptr)
+		return (0);
 	uintptr_t	ret = reinterpret_cast<uintptr_t>(ptr);
 	return (ret);
 }
@@ -48,5 +51,7 @@ uintptr_t Serializer::serialize(Data* ptr)
 Data* Serializer::deserialize(uintptr_t raw)
 {
 	Data*	ret = reinterpret_cast<Data*>(raw);
+	if (!ret)
+		return (NULL);
 	return (ret);
 }

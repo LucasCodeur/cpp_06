@@ -126,7 +126,7 @@ static type	detectType(std::string& number)
 template <typename T> T strConvert(std::string& number, bool* check_inf, bool* check_nan)
 {
 	std::stringstream	ss(number);
-	T					number_convert = 0;
+	T			number_convert = 0;
 	
 	if (number.length() > 1 || isdigit(number[0]))
 	{
@@ -173,11 +173,6 @@ template <typename T> static void print(T number, std::string& strNumber,  bool&
 	int_number = static_cast<long long>(number);
 	float_number = static_cast<long double>(number);
 
-	if (nb_of_decs > 6)
-	{
-		nb_of_decs = 1;
-	}
-
 	std::cout << "char: ";
 	if (check_nan == true || check_inf == true)
 		std::cout << "impossible" << std::endl;
@@ -194,37 +189,39 @@ template <typename T> static void print(T number, std::string& strNumber,  bool&
 	else
 		std::cout << int_number << std::endl;
 
+	std::cout << "float: ";
 	if (check_nan == true)
-		std::cout << "float: nanf" << std::endl;
-	else if (float_number >= std::numeric_limits<float>::max() || float_number <= std::numeric_limits<float>::min())
-		std::cout << "float: impossible" << std::endl;
+		std::cout << "nanf" << std::endl;
+	else if ((float_number > 0.0f && float_number >= std::numeric_limits<float>::infinity()) || (float_number < 0.0f && float_number <= -std::numeric_limits<float>::infinity()))
+		std::cout << "impossible" << std::endl;
 	else if (check_inf == true)
 	{
 		std::string res = (strNumber[0] == '-') ? "-inff" : "+inff";
-		std::cout << "float: " << res << std::endl;
+		std::cout << res << std::endl;
 	}
 	else
-		std::cout << "float: " << std::scientific << std::showpoint << std::setprecision(nb_of_decs) << float_number << "f" << std::endl;
+		std::cout << std::fixed << std::showpoint << std::setprecision(nb_of_decs) << float_number << "f" << std::endl;
 
+	std::cout << "double: ";
 	if (check_nan == true)
-		std::cout << "double: nan" << std::endl;
-	else if (double_number >= std::numeric_limits<double>::max() || double_number <= std::numeric_limits<double>::min())
-		std::cout << "double: impossible" << std::endl;
+		std::cout << "nan" << std::endl;
+	else if ((double_number > 0.0f && double_number >= std::numeric_limits<double>::infinity()) || (double_number < 0.0f && double_number <= -std::numeric_limits<double>::infinity()))
+		std::cout << "impossible" << std::endl;
 	else if (check_inf == true)
 	{
 		std::string res = (strNumber[0] == '-') ? "-inf" : "+inf";
-		std::cout << "double: " << res << std::endl;
+		std::cout << res << std::endl;
 	}
 	else
-		std::cout << "double: "<< std::scientific << std::showpoint << std::setprecision(nb_of_decs) << double_number << std::endl;
+		std::cout << std::fixed << std::showpoint << std::setprecision(nb_of_decs) << double_number << std::endl;
 }
 
 static void	printFromDouble(std::string& number)
 {
-	long double		double_number = 0;
-	bool			check_nan = false;
-	bool			check_inf = false;
-	int			nb_of_decs = 0;
+	long double	double_number = 0;
+	bool		check_nan = false;
+	bool		check_inf = false;
+	int		nb_of_decs = 0;
 	
 	std::string::reverse_iterator rit = number.rbegin();
 	if (*rit == '.')
@@ -238,7 +235,7 @@ static void	printFromDouble(std::string& number)
 static void	printFromFloat(std::string& number)
 {
 	long double	float_number = 0;
-	int			nb_of_decs = 0;
+	int		nb_of_decs = 0;
 	bool		check_inf = false;
 	bool		check_nan = false;
 
@@ -263,9 +260,9 @@ static void	printFromInt(std::string& number)
 
 static void	printFromChar(std::string& number)
 {
-	int				int_number = 0;
-	bool			check_inf = false; 
-	bool			check_nan = false; 
+	int	int_number = 0;
+	bool	check_inf = false; 
+	bool	check_nan = false; 
 	
 	int_number = strConvert<int>(number, &check_inf, &check_nan);
 	print(int_number, number, check_inf, check_nan, 1);
