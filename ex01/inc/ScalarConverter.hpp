@@ -13,16 +13,19 @@
 #ifndef SCALAR_CONVERTER_HPP
 # define SCALAR_CONVERTER_HPP
 
+#include <iostream>
+
 class	ScalarConverter
 {
 	public:
-		ScalarConverter	(void);
-		// ScalarConverter	(//Parameters);
-		ScalarConverter	(const ScalarConverter &other);
-		~ScalarConverter (void);
-		ScalarConverter& operator= ( const ScalarConverter &other);
+		static void	convert(std::string	number);
+		
 	private:
-
+		ScalarConverter	(void);
+		ScalarConverter	(int);
+		ScalarConverter	(const ScalarConverter &);
+		~ScalarConverter (void);
+		ScalarConverter& operator= ( const ScalarConverter &);
 };
 
 # endif
