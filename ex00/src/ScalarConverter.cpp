@@ -15,11 +15,8 @@
 #include <cctype>
 #include <limits>
 #include <sstream>
-#include <ios>
 #include <iomanip>
 #include <cmath>
-
-enum type { INT, FLOAT, DOUBLE, CHAR, NUL };
 
 ScalarConverter::ScalarConverter (void)
 {
@@ -46,41 +43,13 @@ ScalarConverter& ScalarConverter::operator= ( const ScalarConverter &)
 	return (*this);
 }
 
-static bool isNumber(const std::string& s)
-{
-    std::string::const_iterator it = s.begin();
-
-	if (*it == '-')
-		++it;
-    while (it != s.end() && std::isdigit(*it)) 
-		++it;
-    return (!s.empty() && it == s.end());
-}
-
-static void	trimZero(std::string& number)
-{
-	int	i = 0;
-
-	if (number[0] == '0')
-	{
-		while (number[i] != '.')
-		{
-			if (number[i] != '0')
-				break ;
-			i++;
-		}
-	}
-	if (i != 0)
-		number.erase(0, i);
-}
-
 static bool	parsing(std::string& number)
 {
 	int	size = number.length();
 
 	if (size == 1)
 		return (true);
-	if (number == "nan" || number == "nanf" || number == "inf" || number == "inff" || number == "-inff" || number == "-inf")
+	if (number == "nan" || number == "nanf" || number == "inf" || number == "inff" || number == "-inff" || number == "-inf" || number == "+inf" || number == "+inff")
 		return (true);
 
 	size_t	 j = number.find(".");
@@ -113,40 +82,31 @@ static bool	parsing(std::string& number)
 	return (true);
 }
 
-static type	detectType(std::string& number)
+
+template <typename T> T strConvert(std::string& number, bool* check_inf, bool* check_nan)
 {
-	type	ret = NUL;
-	size_t	i = 0;
+	std::stringstream	ss(number);
+	T			number_convert = 0;
 	
-	if (number == "nan"  || number == "inf" || number == "-inf")
-		return (DOUBLE);
-	else if (number == "nanf" || number == "inff" || number == "-inff")
-		return (FLOAT);
-	i = number.find(".");
-	if (i != std::string::npos && number.c_str()[i] == '.')
+	if (number.length() > 1 || isdigit(number[0]))
 	{
-		i = number.rfind("f");
-		if (i != std::string::npos && number.c_str()[i] != 'f')
-			ret = DOUBLE;
-		else
-			ret = FLOAT;
+		ss >> number_convert;
+		if (ss.fail())
+			*check_inf = true;
 	}
 	else
-	{
-		if (isNumber(number) == true)
-			ret = INT;
-		else if (number.length() < 2 && !std::isdigit(number.c_str()[0]))
-			ret = CHAR;
-	}
-	return (ret);
+		number_convert = static_cast<char>(number[0]);
+	if (number == "inf" || number == "inff" || number == "+inf" || number == "+inff")
+		*check_inf = true;
+	else if (number == "nan" || number == "nanf")
+		*check_nan = true;
+	return (number_convert);
 }
 
 static int	setDisplay(std::string& number)
 {
 	int	nb_of_decs = 0;
 
-	trimZero(number);
-	
 	size_t	 i = number.find(".");
 	if (i++ != std::string::npos)
 	{
@@ -156,46 +116,49 @@ static int	setDisplay(std::string& number)
 			i++;
 		}
 	}
+	else
+		nb_of_decs++;
 	return (nb_of_decs);
 }
 
-void print(std::string&number, int nb_of_decs, bool check_nan, bool check_inf)
+static void	printFromDouble(std::string& number)
 {
-	double			number_to_convert = 0;	
-	long double		float_number = 0;
-	long int		int_number = 0;
-	char			char_number = 0;
-	std::stringstream	ss(number);
+	bool		check_nan = false;
+	bool		check_inf = false;
+	double		double_number = 0;	
+	int		nb_of_decs = 0;
+	
+	std::string::reverse_iterator rit = number.rbegin();
+	if (*rit == '.')
+		number += '0';
 
+	double_number = strConvert<double>(number, &check_inf, &check_nan);
+	nb_of_decs = setDisplay(number);
 
-	if (number.length() > 1 || isdigit(number[0]))
+	if (check_nan == true)
+		std::cout << "double: nan" << std::endl;
+	else if (check_inf == true)
 	{
-		ss >> number_to_convert;
-		if (ss.fail() || (!ss.eof() && number[number.length() - 1] != 'f'))
-			check_inf = true;
+		std::string res = (number[0] == '-') ? "-inf" : "+inf";
+		std::cout << "double: " << res << std::endl;
 	}
 	else
-		number_to_convert = number[0];	
+		std::cout << "double: "<< std::fixed << std::showpoint << std::setprecision(nb_of_decs) << double_number << std::endl;
+}
 
-	float_number = static_cast<float>(number_to_convert);
-	char_number = static_cast<char>(number_to_convert);	
-	int_number = static_cast<int>(number_to_convert);	
-		
-	std::cout << "char: ";
-	if (check_nan == true || check_inf == true)
-		std::cout << "impossible" << std::endl;
-	else if (int_number < 33 || number.length() > 1)
-		std::cout << "Non displayable" << std::endl;
-	else
-		std::cout << char_number << std::endl;
+static void	printFromFloat(std::string& number)
+{
+	float		float_number = 0;
+	int		nb_of_decs = 0;
+	bool		check_inf = false;
+	bool		check_nan = false;
 
-	std::cout << "int: ";
-	if (number_to_convert >= std::numeric_limits<int>::max() || number_to_convert <= std::numeric_limits<int>::min())
-		std::cout << "impossible" << std::endl;
-	else if (check_nan == true || check_inf == true)
-		std::cout << "impossible" << std::endl;
-	else
-		std::cout << int_number << std::endl;
+	std::string::reverse_iterator rit = number.rbegin();
+	if (*rit == '.')
+		number += '0';
+
+	float_number = strConvert<float>(number, &check_inf, &check_nan);
+	nb_of_decs = setDisplay(number);
 
 	if (check_nan == true)
 		std::cout << "float: nanf" << std::endl;
@@ -204,65 +167,9 @@ void print(std::string&number, int nb_of_decs, bool check_nan, bool check_inf)
 		std::string res = (number[0] == '-') ? "-inff" : "inff";
 		std::cout << "float: " << res << std::endl;
 	}
-	else if ((number_to_convert > -1 && number_to_convert >= std::numeric_limits<float>::max()) || (number_to_convert < 0 && std::numeric_limits<float>::min() <= number_to_convert))
-		std::cout << "float: impossible" << std::endl;
 	else
 		std::cout << "float: " << std::fixed << std::showpoint << std::setprecision(nb_of_decs) << float_number << "f" << std::endl;
-	
-	if (check_nan == true)
-		std::cout << "double: nan" << std::endl;
-	else if (check_inf == true)
-	{
-		std::string res = (number[0] == '-') ? "-inf" : "inf";
-		std::cout << "double: " << res << std::endl;
-	}
-	else if ((number_to_convert > -1 && number_to_convert >= std::numeric_limits<double>::max()) || (number_to_convert < 0 && std::numeric_limits<double>::min() <= number_to_convert))
-		std::cout << "double: impossible" << std::endl;
-	else
-		std::cout << "double: "<< std::fixed << std::showpoint << std::setprecision(nb_of_decs) << number_to_convert << std::endl;
-}
 
-static void	printFromDouble(std::string& number)
-{
-	bool		check_nan = false;
-	bool		check_inf = false;
-	long double	double_number = 0;	
-	int		nb_of_decs = 0;
-	
-	std::string::reverse_iterator rit = number.rbegin();
-	if (*rit == '.')
-		number += '0';
-
-	if (number == "nan" || number == "nanf")
-		check_nan = true;
-	else
-		check_nan = std::isnan(double_number);
-	if (number == "inf" || number == "inff")
-		check_inf = true;
-	nb_of_decs = setDisplay(number);
-	print(number, nb_of_decs, check_nan, check_inf);
-}
-
-static void	printFromFloat(std::string& number)
-{
-	long double	float_number = 0;
-	int		nb_of_decs = 0;
-	bool		check_inf = false;
-	bool		check_nan = false;
-
-	std::string::reverse_iterator rit = number.rbegin();
-	if (*rit == '.')
-		number += '0';
-
-	std::stringstream	ss(number);
-
-	ss >> float_number;
-	if (number == "nan" || number == "nanf")
-		check_nan = true;
-	if (number == "inf" || number == "inff")
-		check_inf = true;
-	nb_of_decs = setDisplay(number);
-	print(number, nb_of_decs, check_nan, check_inf);
 }
 
 static void	printFromInt(std::string& number)
@@ -270,68 +177,46 @@ static void	printFromInt(std::string& number)
 	long long		int_number = 0;
 	bool			check_nan = false;
 	bool			check_inf = false;
-	std::stringstream	ss(number);
 
+	int_number = strConvert<int>(number, &check_inf, &check_nan);
 
-	ss >> int_number;
-	if (number == "nan" || number == "nanf")
-		check_nan = true;
+	std::cout << "int: ";
+	if (int_number >= std::numeric_limits<int>::max() || int_number <= std::numeric_limits<int>::min())
+		std::cout << "impossible" << std::endl;
+	else if (check_nan == true || check_inf == true)
+		std::cout << "impossible" << std::endl;
 	else
-		check_nan = std::isnan(int_number);
-	if (number == "inf" || number == "inff")
-		check_inf = true;
-	else
-		check_inf = std::isinf(int_number);
-	print(number, 1, check_nan, check_inf);
+		std::cout << int_number << std::endl;
+
 }
 
 static void	printFromChar(std::string& number)
 {
-	char			char_number = 0;
-	bool			check_nan = false;
-	bool			check_inf = false;
-	std::stringstream	ss(number);	
+	int		int_number = 0;
+	unsigned char	char_number = 0;
+	bool		check_inf = false; 
+	bool		check_nan = false; 
 	
-	ss >> char_number;
-	if (number == "nan" || number == "nanf")
-		check_nan = true;
+	int_number = strConvert<int>(number, &check_inf, &check_nan);
+	char_number = static_cast<char>(int_number);
+	std::cout << "char: ";
+	if (check_nan == true || check_inf == true)
+		std::cout << "impossible" << std::endl;
+	else if (!std::isprint(char_number))
+		std::cout << "Non displayable" << std::endl;
 	else
-		check_nan = std::isnan(char_number);
-	if (number == "inf" || number == "inff")
-		check_inf = true;
-	else
-		check_inf = std::isinf(char_number);
-	print(number, 1, check_nan, check_inf);
+		std::cout << char_number << std::endl;
 }
 
 void	ScalarConverter::convert(std::string number)
 {
-	type		ret = NUL;
-
 	if (parsing(number) == false)
 	{
 		std::cout << "wrong arguments" << std::endl;
 		return ;
 	}
-	ret = detectType(number);
-	if (ret == DOUBLE)
-	{
-		std::cout << "double" << std::endl;
-		printFromDouble(number);
-	}
-	else if (ret == FLOAT)
-	{
-		std::cout << "float" << std::endl;
-		printFromFloat(number);
-	}
-	else if (ret == INT)
-	{
-		std::cout << "int" << std::endl;
-		printFromInt(number);
-	}
-	else if (ret == CHAR)
-	{
-		std::cout << "char" << std::endl;
-		printFromChar(number);
-	}
+	printFromChar(number);
+	printFromInt(number);
+	printFromFloat(number);
+	printFromDouble(number);
 }
