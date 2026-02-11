@@ -12,6 +12,8 @@
 
 #include "Base.hpp"
 #include "A.hpp"
+#include "B.hpp"
+#include "C.hpp"
 
 #include <iostream>
 
@@ -21,7 +23,7 @@ static void t_identify_ref(void);
 
 int	main(void)
 {
-	// t_generate();	
+	t_generate();	
 	t_identify_ptr();
 	t_identify_ref();
 	return (0);
@@ -52,14 +54,14 @@ static void t_identify_ptr(void)
 
 static void t_identify_ref(void)
 {
-	std::cout << "--------------------------------------------------------" << std::endl;
+	std::cout << "--------------------------------------------------------\n" << std::endl;
 	std::cout << "Test : t_identify ref" << std::endl;
-	// Base* temp;
-	// Base temp1;
 	A	a;
-
-	// temp = temp1.generate();
-	// temp->identify(*temp);
 	a.identify(a);
-	// delete temp;
+	std::cout << "--------------------------------------------------------" << std::endl;
+	B	b;
+	b.identify(b);
+	std::cout << "--------------------------------------------------------" << std::endl;
+	C	c;
+	c.identify(c);
 }
