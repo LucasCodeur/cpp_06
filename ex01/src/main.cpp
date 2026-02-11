@@ -6,7 +6,7 @@
 /*   By: lud-adam <lud-adam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 17:09:26 by lud-adam          #+#    #+#             */
-/*   Updated: 2026/02/11 10:06:31 by lud-adam         ###   ########.fr       */
+/*   Updated: 2026/02/11 10:08:38 by lud-adam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	main(void)
 	uintptr_t	newPtr = 0;
 		
 	data.nb = 42;
+	data.nb2 = 43;
 	newPtr = Serializer::serialize(ptr);
 	std::cout << "data ptr :" << ptr << std::endl;
 	std::cout << "uintptr_t newPtr :" << newPtr << std::endl;
