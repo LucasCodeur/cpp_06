@@ -6,7 +6,7 @@
 #    By: lud-adam <lud-adam@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/18 12:51:21 by lud-adam          #+#    #+#              #
-#    Updated: 2026/01/29 17:13:12 by lud-adam         ###   ########.fr        #
+#    Updated: 2026/02/11 10:00:49 by lud-adam         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -MMD -std=c++98
 CFLAGS_DEBUG = -Wall -Wextra -MMD -g3 -D DEBUG=1 -std=c++98
-NAME =	ConversionOfScalarTypes
+NAME = Serialization
 P_SRC = src/
 P_OBJ = .obj/
 P_INC = inc/
