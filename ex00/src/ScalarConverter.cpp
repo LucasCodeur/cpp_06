@@ -88,13 +88,16 @@ static bool	parsing(std::string& number)
 
 static bool isNumber(const std::string& s)
 {
-    std::string::const_iterator it = s.begin();
+
+	if (s.empty())
+		return (false);
+	std::string::const_iterator it = s.begin();
 
 	if (*it == '-')
 		++it;
-    while (it != s.end() && std::isdigit(*it)) 
+	while (it != s.end() && std::isdigit(*it)) 
 		++it;
-    return (!s.empty() && it == s.end());
+	return (it == s.end());
 }
 
 static type	detectType(std::string& number)
@@ -125,25 +128,16 @@ static type	detectType(std::string& number)
 	return (ret);
 }
 
-template <typename T> T strConvert(std::string& number, bool* check_inf, bool* check_nan, type nb)
+template <typename T> T strConvert(std::string& number, bool* check_inf, bool* check_nan)
 {
 	std::stringstream	ss(number);
 	T			number_convert = 0;
 	
 	if (number.length() > 1 || isdigit(number[0]))
 	{
-		if (nb != DOUBLE)
-		{
-			ss >> number_convert;
-			if (ss.fail())
-				*check_inf = true;
-		}
-		else
-		{
-			char*	end = NULL;
-			number_convert = std::strtod(number.c_str(), &end);
-			std::cout << "end" << *end << std::endl;
-		}
+		char*	end = NULL;
+		number_convert = std::strtod(number.c_str(), &end);
+		std::cout << "end" << *end << std::endl;
 	}
 	else
 		number_convert = static_cast<char>(number[0]);
@@ -241,7 +235,7 @@ static void	printFromFloating(std::string& number)
 		number += '0';
 
 	nb_of_decs = setDisplay(number);
-	double_number = strConvert<double>(number, &check_inf, &check_nan, DOUBLE);
+	double_number = strConvert<double>(number, &check_inf, &check_nan);
 	print(double_number, number, check_inf, check_nan, nb_of_decs);
 }
 
@@ -251,7 +245,7 @@ static void	printFromInt(std::string& number)
 	bool		check_nan = false;
 	bool		check_inf = false;
 
-	double_number = strConvert<double>(number, &check_inf, &check_nan, DOUBLE);
+	double_number = strConvert<double>(number, &check_inf, &check_nan);
 	print(double_number, number, check_inf, check_nan, 1);
 }
 
@@ -261,7 +255,7 @@ static void	printFromChar(std::string& number)
 	bool	check_inf = false; 
 	bool	check_nan = false; 
 	
-	int_number = strConvert<int>(number, &check_inf, &check_nan, CHAR);
+	int_number = strConvert<int>(number, &check_inf, &check_nan);
 	print(int_number, number, check_inf, check_nan, 1);
 }
 
