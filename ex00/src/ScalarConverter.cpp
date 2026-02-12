@@ -18,6 +18,8 @@
 #include <iomanip>
 #include <cmath>
 
+#include <stdlib.h>
+
 enum type { INT, FLOAT, DOUBLE, CHAR, NUL };
 
 ScalarConverter::ScalarConverter (void)
@@ -51,7 +53,7 @@ static bool	parsing(std::string& number)
 
 	if (size == 1)
 		return (true);
-	if (number == "nan" || number == "nanf" || number == "inf" || number == "inff" || number == "-inff" || number == "-inf" || number == "+inf" || number == "+inff")
+	if (number == "nan" || number == "nanf" || number == "inf" || number == "inff" || number == "-inff" || number == "-inf" || number == "+inf" || number == "+inff" || number == "NaN")
 		return (true);
 
 	size_t	 j = number.find(".");
@@ -100,7 +102,7 @@ static type	detectType(std::string& number)
 	type	ret = NUL;
 	size_t	i = 0;
 	
-	if (number == "nan"  || number == "inf" || number == "-inf" || number == "+inf")
+	if (number == "nan"  || number == "inf" || number == "-inf" || number == "+inf" || number == "NaN")
 		return (DOUBLE);
 	else if (number == "nanf" || number == "inff" || number == "-inff" || number == "+inff")
 		return (FLOAT);
@@ -123,22 +125,30 @@ static type	detectType(std::string& number)
 	return (ret);
 }
 
-template <typename T> T strConvert(std::string& number, bool* check_inf, bool* check_nan)
+template <typename T> T strConvert(std::string& number, bool* check_inf, bool* check_nan, type nb)
 {
 	std::stringstream	ss(number);
 	T			number_convert = 0;
 	
 	if (number.length() > 1 || isdigit(number[0]))
 	{
-		ss >> number_convert;
-		if (ss.fail())
-			*check_inf = true;
+		if (nb != DOUBLE)
+		{
+			ss >> number_convert;
+			if (ss.fail())
+				*check_inf = true;
+		}
+		else
+		{
+			char*	end = NULL;
+			number_convert = std::strtod(number.c_str(), &end);
+		}
 	}
 	else
 		number_convert = static_cast<char>(number[0]);
 	if (number == "inf" || number == "inff" || number == "+inf" || number == "+inff" || number == "-inf" || number == "-inff")
 		*check_inf = true;
-	else if (number == "nan" || number == "nanf")
+	else if (number == "nan" || number == "nanf" || number == "NaN")
 		*check_nan = true;
 	return (number_convert);
 }
@@ -164,11 +174,9 @@ static int	setDisplay(std::string& number)
 template <typename T> static void print(T number, std::string& strNumber,  bool& check_inf, bool& check_nan, short int nb_of_decs)
 {
 	long double	float_number = 0;
-	long double	double_number = 0;
 	long long	int_number = 0;
 	char		char_number = 0;
 
-	double_number = static_cast<long double>(number);
 	char_number = static_cast<char>(number);
 	int_number = static_cast<long long>(number);
 	float_number = static_cast<long double>(number);
@@ -182,7 +190,7 @@ template <typename T> static void print(T number, std::string& strNumber,  bool&
 		std::cout << char_number << std::endl;
 
 	std::cout << "int: ";
-	if (int_number >= std::numeric_limits<int>::max() || int_number <= std::numeric_limits<int>::min())
+	if (int_number > std::numeric_limits<int>::max() || int_number < std::numeric_limits<int>::min())
 		std::cout << "impossible" << std::endl;
 	else if (check_nan == true || check_inf == true)
 		std::cout << "impossible" << std::endl;
@@ -190,30 +198,34 @@ template <typename T> static void print(T number, std::string& strNumber,  bool&
 		std::cout << int_number << std::endl;
 
 	std::cout << "float: ";
+	if  (check_nan == false)
+		check_nan = std::isnan(float_number);
+	else if (check_inf == false)
+		check_inf = std::isinf(float_number);
 	if (check_nan == true)
 		std::cout << "nanf" << std::endl;
-	else if ((float_number > 0.0f && float_number >= std::numeric_limits<float>::infinity()) || (float_number < 0.0f && float_number <= -std::numeric_limits<float>::infinity()))
-		std::cout << "impossible" << std::endl;
 	else if (check_inf == true)
 	{
-		std::string res = (strNumber[0] == '-') ? "-inff" : "+inff";
+		std::string res = (strNumber[0] == '-') ? "-inff" : "inff";
 		std::cout << res << std::endl;
 	}
 	else
 		std::cout << std::fixed << std::showpoint << std::setprecision(nb_of_decs) << float_number << "f" << std::endl;
 
 	std::cout << "double: ";
+	if  (check_nan == false)
+		check_nan = std::isnan(number);
+	else if (check_inf == false)
+		check_inf = std::isinf(number);
 	if (check_nan == true)
 		std::cout << "nan" << std::endl;
-	else if ((double_number > 0.0f && double_number >= std::numeric_limits<double>::infinity()) || (double_number < 0.0f && double_number <= -std::numeric_limits<double>::infinity()))
-		std::cout << "impossible" << std::endl;
 	else if (check_inf == true)
 	{
-		std::string res = (strNumber[0] == '-') ? "-inf" : "+inf";
+		std::string res = (strNumber[0] == '-') ? "-inf" : "inf";
 		std::cout << res << std::endl;
 	}
 	else
-		std::cout << std::fixed << std::showpoint << std::setprecision(nb_of_decs) << double_number << std::endl;
+		std::cout << std::fixed << std::showpoint << std::setprecision(nb_of_decs) << number << std::endl;
 }
 
 static void	printFromDouble(std::string& number)
@@ -227,7 +239,7 @@ static void	printFromDouble(std::string& number)
 	if (*rit == '.')
 		number += '0';
 
-	double_number = strConvert<long double>(number, &check_inf, &check_nan);
+	double_number = strConvert<long double>(number, &check_inf, &check_nan, DOUBLE);
 	nb_of_decs = setDisplay(number);
 	print(double_number, number, check_inf, check_nan, nb_of_decs);
 }
@@ -244,18 +256,18 @@ static void	printFromFloat(std::string& number)
 		number += '0';
 
 	nb_of_decs = setDisplay(number);
-	float_number = strConvert<long double>(number, &check_inf, &check_nan);
+	float_number = strConvert<long double>(number, &check_inf, &check_nan, DOUBLE);
 	print(float_number, number, check_inf, check_nan, nb_of_decs);
 }
 
 static void	printFromInt(std::string& number)
 {
-	long long	int_number = 0;
+	double		double_number = 0;
 	bool		check_nan = false;
 	bool		check_inf = false;
 
-	int_number = strConvert<long long>(number, &check_inf, &check_nan);
-	print(int_number, number, check_inf, check_nan, 1);
+	double_number = strConvert<long long>(number, &check_inf, &check_nan, DOUBLE);
+	print(double_number, number, check_inf, check_nan, 1);
 }
 
 static void	printFromChar(std::string& number)
@@ -264,7 +276,7 @@ static void	printFromChar(std::string& number)
 	bool	check_inf = false; 
 	bool	check_nan = false; 
 	
-	int_number = strConvert<int>(number, &check_inf, &check_nan);
+	int_number = strConvert<int>(number, &check_inf, &check_nan, CHAR);
 	print(int_number, number, check_inf, check_nan, 1);
 }
 

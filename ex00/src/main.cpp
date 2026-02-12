@@ -68,7 +68,7 @@ static void	t_double(void)
 	//    ff = std::cout.flags();
 	//    ff |= std::cout.scientific;
 	// std::cout.flags(ff);
-	double	nb = .04;
+	double	nb = INFINITY;
 	std::cout << nb << "\n";
 }
 
@@ -80,7 +80,7 @@ static void	t_float(void)
 	//    ff = std::cout.flags();
 	//    ff |= std::cout.scientific;
 	// std::cout.flags(ff);
-	double	nb = 0.f;
+	float	nb = NAN;
 	std::cout << nb << "\n";
 }
 
