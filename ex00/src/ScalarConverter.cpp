@@ -137,7 +137,6 @@ template <typename T> T strConvert(std::string& number, bool* check_inf, bool* c
 	{
 		char*	end = NULL;
 		number_convert = std::strtod(number.c_str(), &end);
-		std::cout << "end" << *end << std::endl;
 	}
 	else
 		number_convert = static_cast<char>(number[0]);

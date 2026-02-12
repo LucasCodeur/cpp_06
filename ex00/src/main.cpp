@@ -22,6 +22,7 @@ static void	t_double(void);
 static void	t_float(void);
 static void	t_int(void);
 static void	t_template(void);
+static void	t_converts_multiples(void);
 
 int	main(int argc , char **argv)
 {
@@ -32,6 +33,7 @@ int	main(int argc , char **argv)
 	t_numeric_limits();
 	t_template();
 	t_converts(argc, argv);
+	t_converts_multiples();
 	return (0);
 }
 
@@ -58,6 +60,82 @@ static void	t_converts(int argc, char **argv)
 		return ;
 
 	ScalarConverter::convert(argv[1]);
+}
+
+static void	t_converts_multiples(void)
+{
+	std::cout << "--------------------------------------------------------" << std::endl;
+	std::cout << "Test : t_converts_multiples" << std::endl;
+
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "1 :\n";
+	ScalarConverter::convert("1");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "-1 :\n";
+	ScalarConverter::convert("-1");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "-1.0 :\n";
+	ScalarConverter::convert("-1.0");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "1.0 :\n";
+	ScalarConverter::convert("1.0");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "1.0f :\n";
+	ScalarConverter::convert("1.0f");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "-1.0f :\n";
+	ScalarConverter::convert("-1.0f");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "2147483647 :\n";
+	ScalarConverter::convert("2147483647");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "-2147483648 :\n";
+	ScalarConverter::convert("-2147483648");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "* :\n";
+	ScalarConverter::convert("*");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "42 :\n";
+	ScalarConverter::convert("42");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "inf :\n";
+	ScalarConverter::convert("inf");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "-inf :\n";
+	ScalarConverter::convert("-inf");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "-inff :\n";
+	ScalarConverter::convert("-inff");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "NaN :\n";
+	ScalarConverter::convert("NaN");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "nan :\n";
+	ScalarConverter::convert("nan");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "-nan :\n";
+	ScalarConverter::convert("-nan");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "nanf :\n";
+	ScalarConverter::convert("nanf");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "vide : \"\"\n";
+	ScalarConverter::convert("");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "FLOAT MAX: "<< std::numeric_limits<float>::max() << std::endl;
+	ScalarConverter::convert("340282346638528859811704183484516925440");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "FLOAT MIN: "<< -std::numeric_limits<float>::max() << std::endl;
+	ScalarConverter::convert("-340282346638528859811704183484516925440");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "DOUBLE MAX: "<< std::numeric_limits<double>::max() << std::endl;
+	ScalarConverter::convert("179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "DOUBLE MIN: "<< -std::numeric_limits<double>::max() << std::endl;
+	ScalarConverter::convert("-179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "BEYOND DOUBLE MIN: "<< -std::numeric_limits<double>::max() << std::endl;
+	ScalarConverter::convert("-1797693134862315708145274237317043567980705675258449965989174768031572607800285387605895586327668781715404589535143824642343213268894641827684675467035375169860499105765512820762454900903893289440758685084551339423045832369032229481658085593321233482747978262041447231687381771809192998812504040261841248583680000000000");
 }
 
 static void	t_double(void)
