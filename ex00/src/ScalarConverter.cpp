@@ -172,14 +172,14 @@ template <typename T> static void print(T number, std::string& strNumber,  bool&
 	long long	int_number = 0;
 	char		char_number = 0;
 
-	char_number = static_cast<char>(number);
 	int_number = static_cast<long>(number);
+	char_number = static_cast<char>(int_number);
 	float_number = static_cast<float>(number);
 
 	std::cout << "char: ";
 	if (check_nan == true || check_inf == true)
 		std::cout << "impossible" << std::endl;
-	else if (!std::isprint(char_number))
+	else if (int_number  < 33 || int_number > 127)
 		std::cout << "Non displayable" << std::endl;
 	else
 		std::cout << char_number << std::endl;
@@ -229,10 +229,6 @@ static void	printFromFloating(std::string& number)
 	int		nb_of_decs = 0;
 	bool		check_inf = false;
 	bool		check_nan = false;
-
-	std::string::reverse_iterator rit = number.rbegin();
-	if (*rit == '.')
-		number += '0';
 
 	nb_of_decs = setDisplay(number);
 	double_number = strConvert<double>(number, &check_inf, &check_nan);
