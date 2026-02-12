@@ -35,7 +35,7 @@ Serializer::~Serializer (void)
 	std::cout << "Serializer Destructeur called\n";
 }
 
-Serializer& Serializer::operator= ( const Serializer &)
+Serializer& Serializer::operator= (const Serializer &)
 {
 	return (*this);
 }

@@ -165,6 +165,14 @@ static int	setDisplay(std::string& number)
 	return (nb_of_decs);
 }
 
+template <typename T> static void check_inf_and_nan(T number, bool *check_nan, bool *check_inf)
+{
+	if  (check_nan == false)
+		*check_nan = std::isnan(number);
+	else if (check_inf == false)
+		*check_inf = std::isinf(number);
+}
+
 template <typename T> static void print(T number, std::string& strNumber,  bool& check_inf, bool& check_nan, short int nb_of_decs)
 {
 	float		float_number = 0;
@@ -192,10 +200,7 @@ template <typename T> static void print(T number, std::string& strNumber,  bool&
 		std::cout << int_number << std::endl;
 
 	std::cout << "float: ";
-	if  (check_nan == false)
-		check_nan = std::isnan(float_number);
-	else if (check_inf == false)
-		check_inf = std::isinf(float_number);
+	check_inf_and_nan(float_number, &check_nan, &check_inf);
 	if (check_nan == true)
 		std::cout << "nanf" << std::endl;
 	else if (check_inf == true)
@@ -207,10 +212,7 @@ template <typename T> static void print(T number, std::string& strNumber,  bool&
 		std::cout << std::fixed << std::showpoint << std::setprecision(nb_of_decs) << float_number << "f" << std::endl;
 
 	std::cout << "double: ";
-	if  (check_nan == false)
-		check_nan = std::isnan(number);
-	else if (check_inf == false)
-		check_inf = std::isinf(number);
+	check_inf_and_nan(number, &check_nan, &check_inf);
 	if (check_nan == true)
 		std::cout << "nan" << std::endl;
 	else if (check_inf == true)

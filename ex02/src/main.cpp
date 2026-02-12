@@ -36,7 +36,7 @@ static void	t_generate(void)
 	Base temp;
 	Base* ptr;
 
-	ptr = temp.generate();
+	ptr = generate();
 	delete ptr;
 }
 
@@ -47,8 +47,8 @@ static void t_identify_ptr(void)
 	Base temp;
 	Base* ptr;
 
-	ptr = temp.generate();
-	temp.identify(ptr);
+	ptr = generate();
+	identify(ptr);
 	delete ptr;
 }
 
@@ -57,11 +57,11 @@ static void t_identify_ref(void)
 	std::cout << "--------------------------------------------------------\n" << std::endl;
 	std::cout << "Test : t_identify ref" << std::endl;
 	A	a;
-	a.identify(a);
+	identify(a);
 	std::cout << "--------------------------------------------------------" << std::endl;
 	B	b;
-	b.identify(b);
+	identify(b);
 	std::cout << "--------------------------------------------------------" << std::endl;
 	C	c;
-	c.identify(c);
+	identify(c);
 }

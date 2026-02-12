@@ -23,7 +23,7 @@ Base::~Base (void)
 	std::cout << "Base Destructeur called\n";
 }
 
-Base * Base::generate(void)
+Base * generate(void)
 {
 	srand(time(0));
 	int temp =  std::rand() % 3;
@@ -42,7 +42,7 @@ Base * Base::generate(void)
 	return (NULL);
 }
 
-void Base::identify(Base* p)
+void identify(Base* p)
 {
 	A* ptrA = NULL;
 	B* ptrB = NULL;
@@ -50,47 +50,43 @@ void Base::identify(Base* p)
 	
 	ptrA = dynamic_cast<A*>(p);
 	if (ptrA)
-		std::cout << "Base is A" << std::endl;
+		std::cout << "Type A: " << ptrA << std::endl;
 	ptrB = dynamic_cast<B*>(p);
 	if (ptrB)
-		std::cout << "Base is B" << std::endl;
+		std::cout << "Type B: " << ptrB << std::endl;
 	ptrC = dynamic_cast<C*>(p);
 	if (ptrC)
-		std::cout << "Base is C" << std::endl;
+		std::cout << "Type C: " << ptrC << std::endl;
 }
 
-void Base::identify(Base& p)
+void identify(Base& p)
 {
 	
 	try
 	{
 		A& tempA = dynamic_cast<A&>(p);
-		std::cout << "Base A: " << &tempA << std::endl;
+		std::cout << "Type A: " << &tempA << std::endl;
 		return ;
 	}
 	catch(std::exception &e)
 	{
-		std::cout << e.what() << std::endl;
 	}
-
 	try
 	{
 		B& tempB = dynamic_cast<B&>(p);
-		std::cout << "Base B: " << &tempB << std::endl;
+		std::cout << "Type B: " << &tempB << std::endl;
 		return ;
 	}
 	catch(std::exception &e)
 	{
-		std::cout << e.what() << std::endl;
 	}
 	try
 	{
 		C& tempC = dynamic_cast<C&>(p);
-		std::cout << "Base C: " << &tempC << std::endl;
+		std::cout << "Type C: " << &tempC << std::endl;
 		return ;
 	}
 	catch(std::exception &e)
 	{
-		std::cout << e.what() << std::endl;
 	}
 }

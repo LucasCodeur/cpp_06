@@ -107,6 +107,12 @@ static void	t_converts_multiples(void)
 	std::cout << "-inff :\n";
 	ScalarConverter::convert("-inff");
 	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "+inff :\n";
+	ScalarConverter::convert("+inff");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
+	std::cout << "+inf :\n";
+	ScalarConverter::convert("+inf");
+	std::cout << "--------------------------------------------------------\n" << std::endl;
 	std::cout << "NaN :\n";
 	ScalarConverter::convert("NaN");
 	std::cout << "--------------------------------------------------------\n" << std::endl;
