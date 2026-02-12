@@ -142,6 +142,7 @@ template <typename T> T strConvert(std::string& number, bool* check_inf, bool* c
 		{
 			char*	end = NULL;
 			number_convert = std::strtod(number.c_str(), &end);
+			std::cout << "end" << *end << std::endl;
 		}
 	}
 	else
@@ -173,13 +174,13 @@ static int	setDisplay(std::string& number)
 
 template <typename T> static void print(T number, std::string& strNumber,  bool& check_inf, bool& check_nan, short int nb_of_decs)
 {
-	long double	float_number = 0;
+	float		float_number = 0;
 	long long	int_number = 0;
 	char		char_number = 0;
 
 	char_number = static_cast<char>(number);
-	int_number = static_cast<long long>(number);
-	float_number = static_cast<long double>(number);
+	int_number = static_cast<long>(number);
+	float_number = static_cast<float>(number);
 
 	std::cout << "char: ";
 	if (check_nan == true || check_inf == true)
@@ -228,36 +229,20 @@ template <typename T> static void print(T number, std::string& strNumber,  bool&
 		std::cout << std::fixed << std::showpoint << std::setprecision(nb_of_decs) << number << std::endl;
 }
 
-static void	printFromDouble(std::string& number)
+static void	printFromFloating(std::string& number)
 {
-	long double	double_number = 0;
-	bool		check_nan = false;
-	bool		check_inf = false;
+	double		double_number = 0;
 	int		nb_of_decs = 0;
-	
+	bool		check_inf = false;
+	bool		check_nan = false;
+
 	std::string::reverse_iterator rit = number.rbegin();
 	if (*rit == '.')
 		number += '0';
 
-	double_number = strConvert<long double>(number, &check_inf, &check_nan, DOUBLE);
 	nb_of_decs = setDisplay(number);
+	double_number = strConvert<double>(number, &check_inf, &check_nan, DOUBLE);
 	print(double_number, number, check_inf, check_nan, nb_of_decs);
-}
-
-static void	printFromFloat(std::string& number)
-{
-	long double	float_number = 0;
-	int		nb_of_decs = 0;
-	bool		check_inf = false;
-	bool		check_nan = false;
-
-	std::string::reverse_iterator rit = number.rbegin();
-	if (*rit == '.')
-		number += '0';
-
-	nb_of_decs = setDisplay(number);
-	float_number = strConvert<long double>(number, &check_inf, &check_nan, DOUBLE);
-	print(float_number, number, check_inf, check_nan, nb_of_decs);
 }
 
 static void	printFromInt(std::string& number)
@@ -266,7 +251,7 @@ static void	printFromInt(std::string& number)
 	bool		check_nan = false;
 	bool		check_inf = false;
 
-	double_number = strConvert<long long>(number, &check_inf, &check_nan, DOUBLE);
+	double_number = strConvert<double>(number, &check_inf, &check_nan, DOUBLE);
 	print(double_number, number, check_inf, check_nan, 1);
 }
 
@@ -291,9 +276,9 @@ void	ScalarConverter::convert(std::string number)
 	}
 	ret = detectType(number);
 	if (ret == DOUBLE)
-		printFromDouble(number);
+		printFromFloating(number);
 	else if (ret == FLOAT)
-		printFromFloat(number);
+		printFromFloating(number);
 	else if (ret == INT)
 		printFromInt(number);
 	else if (ret == CHAR)
