@@ -13,6 +13,7 @@
 #include <iostream>
 #include <limits>
 #include <cmath> 
+#include <stdlib.h>
 
 #include "ScalarConverter.hpp"
 
@@ -23,6 +24,7 @@ static void	t_float(void);
 static void	t_int(void);
 static void	t_template(void);
 static void	t_converts_multiples(void);
+static void	t_strtod(char *str);
 
 int	main(int argc , char **argv)
 {
@@ -34,7 +36,17 @@ int	main(int argc , char **argv)
 	t_template();
 	t_converts(argc, argv);
 	t_converts_multiples();
+	t_strtod(argv[1]);
 	return (0);
+}
+
+static void	t_strtod(char *str)
+{
+	char*	end;
+	float	number_convert;
+
+	number_convert = std::strtod(str, &end);
+	std::cout << "NUMBER: " << number_convert << std::endl;
 }
 
 static void	t_numeric_limits(void)

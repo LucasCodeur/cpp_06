@@ -14,7 +14,6 @@
 
 #include <cctype>
 #include <limits>
-#include <sstream>
 #include <iomanip>
 #include <cmath>
 
@@ -130,8 +129,7 @@ static type	detectType(std::string& number)
 
 template <typename T> T strConvert(std::string& number, bool* check_inf, bool* check_nan)
 {
-	std::stringstream	ss(number);
-	T			number_convert = 0;
+	T	number_convert = 0;
 	
 	if (number.length() > 1 || isdigit(number[0]))
 	{
